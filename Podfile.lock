@@ -1,0 +1,80 @@
+PODS:
+  - Alamofire (4.9.1)
+  - DJI-SDK-iOS (4.16.2)
+  - DJIFlySafeDatabaseResource (01.00.01.18)
+  - DJIWidget (1.6.8)
+  - GoogleMaps (4.1.0):
+    - GoogleMaps/Maps (= 4.1.0)
+  - GoogleMaps/Base (4.1.0)
+  - GoogleMaps/Maps (4.1.0):
+    - GoogleMaps/Base
+  - GooglePlaces (7.1.0)
+  - GSImageViewerController (1.6.3)
+  - iOSDropDown (0.4.0)
+  - lottie-ios (4.2.0)
+  - MJRefresh (3.7.5)
+  - PromiseKit (6.18.1):
+    - PromiseKit/CorePromise (= 6.18.1)
+    - PromiseKit/Foundation (= 6.18.1)
+    - PromiseKit/UIKit (= 6.18.1)
+  - PromiseKit/CorePromise (6.18.1)
+  - PromiseKit/Foundation (6.18.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.18.1):
+    - PromiseKit/CorePromise
+  - SCLAlertView (0.8)
+  - SnapKit (4.2.0)
+  - SwiftyJSON (5.0.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - DJI-SDK-iOS
+  - DJIFlySafeDatabaseResource (~> 01.00.01.18)
+  - DJIWidget
+  - GoogleMaps
+  - GooglePlaces (= 7.1.0)
+  - GSImageViewerController
+  - iOSDropDown
+  - lottie-ios
+  - MJRefresh
+  - PromiseKit
+  - SCLAlertView
+  - SnapKit
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - DJI-SDK-iOS
+    - DJIFlySafeDatabaseResource
+    - DJIWidget
+    - GoogleMaps
+    - GooglePlaces
+    - GSImageViewerController
+    - iOSDropDown
+    - lottie-ios
+    - MJRefresh
+    - PromiseKit
+    - SCLAlertView
+    - SnapKit
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  DJI-SDK-iOS: 44308a021c3b95a912be52c4e7a8e0a27e5434f5
+  DJIFlySafeDatabaseResource: 400e1856340042bd6943e53c2d4b374ac8409702
+  DJIWidget: 9d92abb52888cd6296717c93feacd8a703bf678a
+  GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
+  GooglePlaces: 187946335ec3dc624de71c0a9ddcc712f19b0ee1
+  GSImageViewerController: 20a257d7e3dd9ee171c2dfea659992eba2761839
+  iOSDropDown: ce9daa584eaa5567cafc1b633e3cc7eb6d9cea42
+  lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
+  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+
+PODFILE CHECKSUM: 29c75f8c3ec6105139655e4bbdaecdc3bb781463
+
+COCOAPODS: 1.13.0
