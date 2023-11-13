@@ -22,9 +22,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7.1</string>
+	<string>2.7.2</string>
 	<key>CFBundleVersion</key>
-	<string>26</string>
+	<string>27</string>
 	<key>DJISDKAppKey</key>
 	<string>b0a8a7666a9cef6c680346f4</string>
 	<key>LSRequiresIPhoneOS</key>

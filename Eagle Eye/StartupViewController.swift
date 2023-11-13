@@ -22,11 +22,6 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
     @IBOutlet weak var sideBarView: UIView!
     @IBOutlet weak var fpvCameraBtn: UIButton!
     
-    @IBOutlet weak var sideBarCloseView: UIView!
-    @IBOutlet weak var openComponents: UIButton!
-    @IBOutlet weak var bluetoothConnectorButton: UIButton!
-    
-    
     @IBOutlet weak var searchEdt: UITextField!
     @IBOutlet weak var droneBatteryLbl: UILabel!
     @IBOutlet weak var satteliteLbl: UILabel!
@@ -56,6 +51,7 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
     @IBOutlet weak var droneImageView: UIImageView!
     @IBOutlet weak var surveyPopup: UIView!
     
+    @IBOutlet weak var addProjectBtn: CustomView!
     @IBOutlet weak var existingProjectBtn: CustomView!
     @IBOutlet weak var logoutView: CustomView!
     @IBOutlet weak var yesLogoutBtn: CustomView!
@@ -64,16 +60,15 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
     var isDeviceConnected: Bool = false
     var sideBarOpen: Bool = false
     var allProjects: [Project] = []
+    var filteredProjects: [Project] = []
 
+    @IBOutlet weak var sideBarBtn: CustomView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         self.sideBarView.isHidden = true
-        self.sideBarCloseView.isHidden = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        self.sideBarCloseView.addGestureRecognizer(tapGesture)
         
         UIApplication.shared.isIdleTimerDisabled = true
         
@@ -101,6 +96,46 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
         
         let existingProjectGesture = UITapGestureRecognizer(target: self, action: #selector(showExistingProjects))
         self.existingProjectBtn.addGestureRecognizer(existingProjectGesture)
+        
+        let sideBarBtnGesture = UITapGestureRecognizer(target: self, action: #selector(showSideBarBtnClick))
+        self.sideBarBtn.addGestureRecognizer(sideBarBtnGesture)
+        
+        let addNewProjectGesture = UITapGestureRecognizer(target: self, action: #selector(addNewProject))
+        self.addNewView.addGestureRecognizer(addNewProjectGesture)
+        
+    }
+    
+    @objc func addNewProject(){
+        let nextViewController = storyboard?.instantiateViewController(withIdentifier: "AddressInfoViewController") as! AddressInfoViewController
+        self.navigationController?.pushViewController(nextViewController, animated: false)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let text = textField.text!.lowercased()
+        print(text)
+        if text == ""{
+            self.filteredProjects = self.allProjects
+        }else{
+            var tmp:[Project] = []
+            for i in (0 ..< allProjects.count) {
+                if(allProjects[i].name != nil && allProjects[i].name! != ""){
+                    if(allProjects[i].name!.lowercased().contains("\(text)")){
+                        tmp.append(allProjects[i])
+                    }
+                }
+            }
+            self.filteredProjects = tmp
+        }
+        self.projectsTable.reloadData()
+        return true
+    }
+    
+    @objc func showSideBarBtnClick (){
+        self.surveyPopupView.isHidden = false
+        self.sideBarView.isHidden = false
+        //
+        self.surveyPopupView.alpha = 0.8
+        self.sideBarView.alpha = 1.0
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -123,12 +158,15 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
     
     //This will Open the Survey Popup
     @objc func startSurveyClck() {
-        self.surveyPopupView.isHidden = false
-        self.surveyPopup.isHidden = false
+//        self.surveyPopupView.isHidden = false
+//        self.surveyPopup.isHidden = false
+//        
+//        self.surveyPopupView.alpha = 0.8
+//        self.surveyPopup.alpha = 1.0
         
-        self.surveyPopupView.alpha = 0.8
-        self.surveyPopup.alpha = 1.0
-        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyboard.instantiateViewController(withIdentifier: "TimelineMissionViewController") as! TimelineMissionViewController
+        self.navigationController?.pushViewController(nextViewController, animated: false)
     }
     
     //This will close the Survey Popup
@@ -142,6 +180,9 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
         self.surveyPopup.alpha = 0.0
         self.logoutPopup.alpha = 0.0
         self.allProjectsView.alpha = 0.0
+        
+        self.sideBarView.isHidden = true
+        self.sideBarView.alpha = 0.0
         
     }
     
@@ -195,6 +236,7 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
                                 let decoder = JSONDecoder();
                                 let res = try decoder.decode([Project].self, from: jsonData!)
                                 self.allProjects = res
+                                self.filteredProjects = res
                                 self.projectsTable.reloadData()
                             } catch let error {
                                 print(error.localizedDescription)
@@ -222,36 +264,8 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
         
     }
 
-    
-    @objc func handleTap(){
-        self.openAndCloseSidebar()
-    }
-    
-    
     @IBAction func AllProjectBtnClick(_ sender: Any) {
-        self.allProjectsView.isHidden = false
-        getAllProjects()
-    }
-    
-    func openAndCloseSidebar(){
-        if sideBarOpen == false && self.allProjectsView.isHidden == true{
-            sideBarOpen = true
-            UIView.animate(withDuration: 0.2, animations: {
-                self.sideBarView.isHidden = false
-            })
-            sideBarCloseView.isHidden = false
-        }else{
-            sideBarOpen = false
-            UIView.animate(withDuration: 0.2, animations: {
-                self.sideBarView.isHidden = true
-            })
-            sideBarCloseView.isHidden = true
-            self.allProjectsView.isHidden = true
-        }
-    }
-    
-    @IBAction func goFlyBtnClick(_ sender: Any) {
-        openAndCloseSidebar()
+        showExistingProjects()
     }
     
     @IBAction func onPanaromaClick(_ sender: Any) {
@@ -370,13 +384,13 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
 
 extension StartupViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allProjects.count
+        return filteredProjects.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.projectsTable.dequeueReusableCell(withIdentifier: "StartProjectCell", for: indexPath) as! StartProjectCell
         
-        let project = allProjects[indexPath.row]
+        let project = filteredProjects[indexPath.row]
         var urlStr = project.address_image
     
         let url = URL(string: urlStr!)
@@ -405,8 +419,8 @@ extension StartupViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let index = indexPath.row
-        let project = allProjects[index]
-        self.handleTap()
+        let project = filteredProjects[index]
+        closeSurveyPopup()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let nextViewController = storyboard.instantiateViewController(withIdentifier: "AddressInfoViewController") as! AddressInfoViewController
         nextViewController.project = project

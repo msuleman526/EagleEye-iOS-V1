@@ -2561,42 +2561,54 @@ extension TimelineMissionViewController{
                 if(count <= projectSetting.circleOnePoints!){
                     height = project.must_height! + 10
                 }else{
-                    if i < waypointsList.count - 1 {
-                        let nextWaypoint = waypointsList[i + 1]
-                        let isNextWaypointInObstacle = Utils.checkWaypointInObstacle(latitude: nextWaypoint.lat!, longitude: nextWaypoint.lng!, obstacle_boundary: obstacleBoundry)
-
-                        switch isAltitudeChanged {
-                            case "Flying":
-                                if isNextWaypointInObstacle {
-                                    changedAltitude = project.must_height! + 5
-                                    isAltitudeChanged = "Going Inside"
-                                }
-                            case "Going Inside", "Inside":
-                                if isNextWaypointInObstacle {
-                                    isAltitudeChanged = "Inside"
-                                } else {
-                                    changedAltitude = project.must_height! + 5
-                                    isAltitudeChanged = "Outside"
-                                }
-                            default:
-                                isAltitudeChanged = "Flying"
-                        }
-                    } else {
-                        isAltitudeChanged = "Flying"
-                    }
-
                     height = project.height_of_house! + 10
-                    if(Utils.checkWaypointInObstacle(latitude: waypointsList[i].lat!, longitude: waypointsList[i].lng!, obstacle_boundary: obstacleBoundry)){
+                }
+                
+                changedAltitude = project.must_height! + 5
+                
+                if i < waypointsList.count - 1 {
+                    let nextWaypoint = waypointsList[i + 1]
+                    
+                    let isNextWaypointInObstacle = Utils.checkWaypointInObstacle(latitude: nextWaypoint.lat!, longitude: nextWaypoint.lng!, obstacle_boundary: obstacleBoundry)
+
+                    switch isAltitudeChanged {
+                        case "Flying":
+                            if isNextWaypointInObstacle && count >= projectSetting.circleOnePoints! {
+                                isAltitudeChanged = "Going Inside"
+                            }
+                        case "Going Inside", "Inside":
+                            if isNextWaypointInObstacle {
+                                isAltitudeChanged = "Inside"
+                            } else {
+                                isAltitudeChanged = "Outside"
+                            }
+                        default:
+                            isAltitudeChanged = "Flying"
+                    }
+                } else {
+                    isAltitudeChanged = "Flying"
+                }
+                
+                if(Utils.checkWaypointInObstacle(latitude: waypointsList[i].lat!, longitude: waypointsList[i].lng!, obstacle_boundary: obstacleBoundry)){
+                    if(count <= projectSetting.circleOnePoints!){
+                        height = project.must_height! + 10
+                    }else{
                         height = project.must_height! + 5
                     }
                 }
                 
                 drawWaypoint(latitude: waypointsList[i].lat!, longitude: waypointsList[i].lng!, project: project, height: height)
                 
-                if(isAltitudeChanged == "Going Inside"){
+                
+                if(isAltitudeChanged == "Going Inside" && count >= projectSetting.circleOnePoints!){
                     drawWaypoint(latitude: waypointsList[i].lat!, longitude: waypointsList[i].lng!, project: project, height: changedAltitude)
-                }else if(isAltitudeChanged == "Outside" && i < waypointsList.count - 1){
+                }else if(isAltitudeChanged == "Outside" && i < waypointsList.count - 1 && count >= projectSetting.circleOnePoints!){
                     drawWaypoint(latitude: waypointsList[i+1].lat!, longitude: waypointsList[i+1].lng!, project: project, height: changedAltitude)
+                    isAltitudeChanged = "Flying"
+                }else{
+                    if count == projectSetting.circleOnePoints!{
+                        drawWaypoint(latitude: waypointsList[i+1].lat!, longitude: waypointsList[i+1].lng!, project: project, height: height)
+                    }
                 }
             }
         }catch let error as Error{

@@ -77,10 +77,8 @@ class PhotoLibraryManager {
                     albumChangeRequest.addAssets(fastEnumeration)
                 }
             }
-                
         }
     }
-
     
     static func uploadImageToServer(name: String, imageData: Data, metadata: [String: Any]) -> Promise<Void> {
         // Create a Promise that will resolve when the file has been sent successfully
@@ -90,14 +88,11 @@ class PhotoLibraryManager {
             
             let token = "Bearer \(SessionUtils.getUserToken())"
             let url = "\(Constants.API_LINK)api/project/upload/image/\(SessionUtils.getLatestProject())"
-            print(token)
-            print(url)
             
             let headers: HTTPHeaders = [
                 "Accept": "json",
                 "Authorization": token
             ]
-            
             
             // Construct the API endpoint URL
             guard let url = URL(string: url) else {
