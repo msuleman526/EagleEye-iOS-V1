@@ -324,7 +324,6 @@ class StartupViewController: UIViewController, DJIRemoteControllerDelegate, UITe
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        Environment.connectionService.stop()
         UIApplication.shared.isIdleTimerDisabled = UIApplication.shared.isIdleTimerDisabled
     }
     
@@ -494,7 +493,6 @@ extension StartupViewController{
 
     func updateGpsSignalStatus(_ signalStatus: UInt?) {
         let defaultIndicator = UIImage(#imageLiteral(resourceName: "indicatorSignal0"))
-        print("Signal Status \(signalStatus)")
         if let status = signalStatus {
             switch status {
             case 0:

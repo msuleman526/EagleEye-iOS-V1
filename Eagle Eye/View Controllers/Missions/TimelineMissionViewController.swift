@@ -2268,18 +2268,16 @@ extension TimelineMissionViewController{
     }
 
     func updateLinkSignalStrength(_ signalStrength: UInt?) {
-        let defaultIndicator = UIImage(#imageLiteral(resourceName: "indicatorSignal0"))
+        let defaultIndicator = UIImage(named: "remote_red")
         if let signalStrength = signalStrength {
-            if signalStrength > 0 && signalStrength <= 20 {
-                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal1")
-            } else if signalStrength > 20 && signalStrength <= 40 {
-                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal2")
-            } else if signalStrength > 40 && signalStrength <= 60 {
-                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal3")
-            } else if signalStrength > 60 && signalStrength <= 80 {
-                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal4")
-            } else if signalStrength > 80 && signalStrength <= 100 {
-                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal5")
+            if signalStrength > 0 && signalStrength <= 25 {
+                remoteSignalImage.image = UIImage(named: "remote_signal_1")
+            } else if signalStrength > 25 && signalStrength <= 50 {
+                remoteSignalImage.image = UIImage(named: "remote_signal_2")
+            } else if signalStrength > 50 && signalStrength <= 75 {
+                remoteSignalImage.image = UIImage(named: "remote_signal_3")
+            } else if signalStrength > 75 && signalStrength <= 100 {
+                remoteSignalImage.image = UIImage(named: "remote_signal_4")
             }
         } else {
             remoteSignalImage.image = defaultIndicator
@@ -2289,24 +2287,24 @@ extension TimelineMissionViewController{
     
     func updateBettery(_ batteryPercentage: UInt?) {
         if let batteryPercentage = batteryPercentage {
-            betteryLabel.text = String(batteryPercentage) + "%"
-            if batteryPercentage > 0 && batteryPercentage <= 30 {
-                betteryLabel.textColor = Colors.error
-                betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery1")
-            } else if batteryPercentage > 30 && batteryPercentage <= 60 {
-                betteryLabel.textColor = Colors.warning
-                betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery2")
-            } else if batteryPercentage > 60 && batteryPercentage <= 80 {
-                betteryLabel.textColor = Colors.success
-                betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery2")
+            self.betteryLabel.text = String(batteryPercentage) + "%"
+            if batteryPercentage > 0 && batteryPercentage <= 50 {
+                self.betteryLabel.textColor = Colors.error
+                self.betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery1")
+            } else if batteryPercentage > 25 && batteryPercentage <= 50 {
+                self.betteryLabel.textColor = Colors.warning
+                self.betteryImageView.image = UIImage(named: "indicatorBattery3")
+            } else if batteryPercentage > 50 && batteryPercentage <= 75 {
+                self.betteryLabel.textColor = Colors.warning
+                self.betteryImageView.image = UIImage(named: "indicatorBattery3")
             } else {
-                betteryLabel.textColor = Colors.success
-                betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery3")
+                self.betteryLabel.textColor = Colors.success
+                self.betteryImageView.image = UIImage(named: "indicatorBattery4")
             }
         } else {
-            betteryLabel.text = "0.0%"
-            betteryLabel.textColor = UIColor.white
-            betteryImageView.image = #imageLiteral(resourceName: "indicatorBattery1")
+            self.betteryLabel.text = "0%"
+            self.betteryLabel.textColor = UIColor.white
+            self.betteryImageView.image = UIImage(named: "indicatorBattery0")
         }
     }
 }
