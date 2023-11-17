@@ -2268,16 +2268,16 @@ extension TimelineMissionViewController{
     }
 
     func updateLinkSignalStrength(_ signalStrength: UInt?) {
-        let defaultIndicator = UIImage(named: "remote_red")
+        let defaultIndicator = UIImage(#imageLiteral(resourceName: "indicatorSignal0"))
         if let signalStrength = signalStrength {
             if signalStrength > 0 && signalStrength <= 25 {
-                remoteSignalImage.image = UIImage(named: "remote_signal_1")
+                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal1")
             } else if signalStrength > 25 && signalStrength <= 50 {
-                remoteSignalImage.image = UIImage(named: "remote_signal_2")
+                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal2")
             } else if signalStrength > 50 && signalStrength <= 75 {
-                remoteSignalImage.image = UIImage(named: "remote_signal_3")
+                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal3")
             } else if signalStrength > 75 && signalStrength <= 100 {
-                remoteSignalImage.image = UIImage(named: "remote_signal_4")
+                remoteSignalImage.image = #imageLiteral(resourceName: "indicatorSignal5")
             }
         } else {
             remoteSignalImage.image = defaultIndicator
