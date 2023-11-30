@@ -255,7 +255,6 @@ class AddressInfoViewController: UIViewController, CLLocationManagerDelegate, GM
             resourceString = "\(Constants.API_LINK)api/project/\(String(describing: project!.id ?? 0))";
         }
         
-        print(resourceString)
         
         Alamofire.request(resourceString, method: .post, parameters: parameters, headers: headers).responseJSON(completionHandler: { (response) in
             switch response.result {

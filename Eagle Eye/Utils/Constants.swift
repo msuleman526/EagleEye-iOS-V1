@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public class Constants {
     public static var API_LINK: String = "https://eagleyedrone.com/"
     public static var SESSION_EMAIL:String = "SESSION_EMAIL"
@@ -20,7 +19,8 @@ public class Constants {
     public static var SESSION_TYPE:String = "SESSION_TYPE"
     public static var LOGGING_ENABLED:Bool = true
     
-    public static let GOOGLE_MAP_PLACES_API_KEY:String = "AIzaSyCIxJV6mYZCYE8U4IYI5_JNoaQtRdp3NCE"
-    public static let GOOGLE_MAP_KEY:String = "AIzaSyCGJd1Jc-aN30rEU2cwoxY4GHx4ZBbFweE"
+    public static let GOOGLE_MAP_PLACES_API_KEY:String = "AIzaSyAo1viD-Ut0TzXTyihevwuf-9tv_J3dPa0"
+    public static let GOOGLE_MAP_KEY:String = "AIzaSyAo1viD-Ut0TzXTyihevwuf-9tv_J3dPa0"
+    
     public static var IMAGE_URL:String = "https://maps.googleapis.com/maps/api/staticmap?center=[LAT],[LNG]&zoom=20&size=800x500&maptype=satellite&format=png&key=\(Constants.GOOGLE_MAP_PLACES_API_KEY)"
 }
