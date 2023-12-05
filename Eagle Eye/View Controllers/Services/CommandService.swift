@@ -254,7 +254,7 @@ extension CommandService {
         mission.finishedAction = missionSetting.finishAction
         mission.headingMode = missionSetting.headingMode
         mission.flightPathMode = missionSetting.flightPathMode
-        mission.rotateGimbalPitch = missionSetting.rotateGimblePitch
+        mission.rotateGimbalPitch = true
         mission.exitMissionOnRCSignalLost = missionSetting.exitMissionOnRCSignalLost
         mission.gotoFirstWaypointMode = missionSetting.gotoFirstWaypointMode
         mission.repeatTimes = Int32(missionSetting.repeatTimes)
@@ -280,13 +280,16 @@ extension CommandService {
                 waypoint.gimbalPitch = Float(angle)
             }
             
-            let action0 = DJIWaypointAction(actionType: .stay, param: 3500)
-            waypoint.add(action0)
+            let stayBeforePhotoShootAction = DJIWaypointAction(actionType: .stay, param: 2000)
+            waypoint.add(stayBeforePhotoShootAction)
             
             if(index != 0){
-                let action = DJIWaypointAction(actionType: .shootPhoto, param: 4)
-                waypoint.add(action)
+                let shootAction = DJIWaypointAction(actionType: .shootPhoto, param: 0)
+                waypoint.add(shootAction)
             }
+            
+            let stayAfterPhotoShootAction = DJIWaypointAction(actionType: .stay, param: 1000)
+            waypoint.add(stayAfterPhotoShootAction)
             
             mission.add(waypoint)
             index += 1
