@@ -252,7 +252,7 @@ class TimelineMissionViewController: UIViewController, UICollectionViewDelegate,
         self.connectionLbl.text = "Connected"
         self.connectionLbl.textColor = .green
         
-        initFlyZone()
+        //initFlyZone()
         
         self.commandStartBtn.actionCompletion = { [weak self] in
             self?.commandStartBtnClick()

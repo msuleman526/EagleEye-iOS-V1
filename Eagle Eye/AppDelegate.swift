@@ -14,10 +14,8 @@ import GooglePlaces
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     var window: UIWindow?
-
     var productCommunicationManager = ProductCommunicationManager()
     
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("\(Constants.GOOGLE_MAP_KEY)")

@@ -28,7 +28,7 @@ public class DJIMediaFilesViewController: UIViewController {
     private var mediaFileIndex = 0
     private var page = 1
     // 每次加载的数量
-    private var batchCount = 32
+    private var batchCount = 10000
     
     public init(style: DJIFileManagerTheme.Type) {
         djiFileManagerTheme = style
@@ -74,10 +74,10 @@ extension DJIMediaFilesViewController {
         collectionView.register(MediaFileCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.mj_footer = MJRefreshAutoNormalFooter {
-            self.loadMoreMediaFiles()
-        }
-        collectionView.mj_footer!.isHidden = true
+        //collectionView.mj_footer = MJRefreshAutoNormalFooter {
+            //self.loadMoreMediaFiles()
+        //}
+        //collectionView.mj_footer!.isHidden = true
         
         placeholderStateView.setup(state: .loading)
         collectionView.addSubview(placeholderStateView)
@@ -119,9 +119,12 @@ extension DJIMediaFilesViewController {
     private func fetchMediaFilesSnapshot() {
         guard let camera = DJISDKManager.product()?.camera
             , let mediaManager = camera.mediaManager else {
+            print("Failelleldld")
             self.placeholderStateView.setup(state: .fail)
             return
         }
+        
+        self.navigationItem.rightBarButtonItem = self.selectButton
         
         firstly {
             camera.setMode(.mediaDownload)
@@ -132,9 +135,8 @@ extension DJIMediaFilesViewController {
         }.then { fileList -> Promise<Void> in
             return self.fetchMediaThumbnail(mediaFileList: fileList)
         }.done {
-            self.navigationItem.rightBarButtonItem = self.selectButton
-            self.collectionView.mj_footer!.isHidden = false
-            self.collectionView.mj_footer!.endRefreshing()
+            //self.collectionView.mj_footer!.isHidden = false
+            //self.collectionView.mj_footer!.endRefreshing()
             self.collectionView.reloadData()
         }.catch { error in
             self.placeholderStateView.setup(state: .timeout)
@@ -168,7 +170,7 @@ extension DJIMediaFilesViewController {
     }
     
     private func fetchMediaThumbnail(mediaFileList: [DJIMediaFile]) -> Promise<Void> {
-        collectionView.mj_footer!.isHidden = true
+        //collectionView.mj_footer!.isHidden = true
         if mediaFileList.count == 0 {
             placeholderStateView.setup(state: .noData)
             return Promise.value(())
@@ -308,7 +310,7 @@ extension DJIMediaFilesViewController {
 extension DJIMediaFilesViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         placeholderStateView.isHidden = mediaFileModelList.count > 0
-        collectionView.mj_footer!.isHidden = mediaFileModelList.count < batchCount
+        //collectionView.mj_footer!.isHidden = mediaFileModelList.count < batchCount
         return mediaFileModelList.count
     }
     

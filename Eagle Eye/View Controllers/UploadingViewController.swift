@@ -55,7 +55,6 @@ class UploadingViewController: UIViewController {
         backBtn.addGestureRecognizer(tapGestureRecognizer)
         self.percentageLbl.text = "0%"
         
-        
         getAllProjects()
     }
     
@@ -84,48 +83,58 @@ class UploadingViewController: UIViewController {
             Toast.show(message: "Uploading in progress", controller: self)
         }
     }
-
     
-    @IBAction func uploadBtnClick(_ sender: Any) {
+    
+    @IBAction func selectProjectClick(_ sender: Any) {
+        self.uploadImages()
+        self.projectView.isHidden = true
+    }
+    
+    func uploadImages(){
         if(selectedImages.count == 0){
             Toast.show(message: "No Images are selected", controller: self)
         }else if(SessionUtils.getLatestProject() == 0){
             self.showPopup(message: "Please select project to upload images")
         }else{
-            if(self.uploadBtn.titleLabel!.text! == "Upload" || self.uploadBtn.titleLabel!.text! == "Resume"){
-                self.showCancelBtn()
-                self.showPopup(message: "Uploading Started. Please wait.")
-                firstly {
-                    self.uploadMediaToServer(index: self.currentDownloadIndex) { (index, progress) in
-                        self.currentDownloadIndex = index
-                        let progress = Float(index)/Float(self.selectedImages.count)
-                        self.percentageLbl.text = "\(Int(progress*100))%"
-                        self.progressBar.progress = progress
-                        self.uploadLbl.text = "\(index + 1)/\(self.selectedImages.count) uploading..."
-                    }
-                }.done { [self] in
-                    self.showUploadBtn(message: "Upload")
-                    self.showConfirmPopup()
-                    self.uploadLbl.text = "\(self.currentDownloadIndex + 1)/\(self.selectedImages.count) completed."
-                    self.progressBar.progress = 1
-                    self.getAllProjects()
-                }.catch { error in
-                    self.selectedImages[self.currentDownloadIndex].djiMediaFile.stopFetchingFileData(completion: nil)
-                    PhotoLibraryManager.cancelUploading()
-                    self.showUploadBtn(message: "Resume")
-                    self.uploadLbl.text = "Error on \(self.currentDownloadIndex + 1)/\(self.selectedImages.count)"
-                    self.getAllProjects()
-                    self.showPopup(message: "Uploading Failed.")
+            self.showCancelBtn()
+            //self.showPopup(message: "Uploading Started. Please wait.")
+            firstly {
+                self.uploadMediaToServer(index: self.currentDownloadIndex) { (index, progress) in
+                    self.currentDownloadIndex = index
+                    let progress = Float(index)/Float(self.selectedImages.count)
+                    self.percentageLbl.text = "\(Int(progress*100))%"
+                    self.progressBar.progress = progress
+                    self.uploadLbl.text = "\(index + 1)/\(self.selectedImages.count) uploading..."
                 }
-            }else{
+            }.done { [self] in
+                self.showUploadBtn(message: "Upload")
+                self.showConfirmPopup()
+                self.uploadLbl.text = "\(self.currentDownloadIndex + 1)/\(self.selectedImages.count) completed."
+                self.progressBar.progress = 1
+                self.getAllProjects()
+            }.catch { error in
                 self.selectedImages[self.currentDownloadIndex].djiMediaFile.stopFetchingFileData(completion: nil)
                 PhotoLibraryManager.cancelUploading()
-                self.showPopup(message: "Uploading Process is cancelled")
                 self.showUploadBtn(message: "Resume")
-                self.uploadLbl.text = "Cancelled on \(self.currentDownloadIndex + 1)/\(self.selectedImages.count)"
+                self.uploadLbl.text = "Error on \(self.currentDownloadIndex + 1)/\(self.selectedImages.count)"
                 self.getAllProjects()
+                self.showPopup(message: "Uploading Failed.")
             }
         }
+    }
+    
+    @IBAction func uploadBtnClick(_ sender: Any) {
+        if(self.uploadBtn.titleLabel!.text! == "Upload" || self.uploadBtn.titleLabel!.text! == "Resume"){
+            self.projectView.isHidden = false
+        }else{
+            self.selectedImages[self.currentDownloadIndex].djiMediaFile.stopFetchingFileData(completion: nil)
+            PhotoLibraryManager.cancelUploading()
+            self.showPopup(message: "Uploading Process is cancelled")
+            self.showUploadBtn(message: "Resume")
+            self.uploadLbl.text = "Cancelled on \(self.currentDownloadIndex + 1)/\(self.selectedImages.count)"
+            self.getAllProjects()
+        }
+        
     }
     
     func showConfirmPopup(){
@@ -154,7 +163,7 @@ class UploadingViewController: UIViewController {
     }
     
     func showPopup(message: String){
-        let alertController = UIAlertController(title: "Uploading Images", message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Uploading Process", message: message, preferredStyle: .alert)
                 
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
@@ -271,9 +280,16 @@ extension UploadingViewController: UITableViewDelegate, UITableViewDataSource{
         cell.addressNameLbl.text = project.name
         cell.addressLbl.text = project.address
         
-        if(project.id! == selectProjectID){
+        if(SessionUtils.getLatestProject() == 0 && indexPath.row == 0){
+            print(SessionUtils.getLatestProject())
             cell.selectedImg.image = UIImage(systemName: "checkmark.circle")
-            print("Total Images \(project.total_images!)")
+            self.selectProjectID = project.id!
+            self.alreadyUploadedLbl.text = "\(project.total_images!)"
+            self.projectNameLbl.text = "Selected Project: \(project.name!)"
+        }
+        else if(SessionUtils.getLatestProject() == project.id!){
+            cell.selectedImg.image = UIImage(systemName: "checkmark.circle")
+            self.selectProjectID = project.id!
             self.alreadyUploadedLbl.text = "\(project.total_images!)"
             self.projectNameLbl.text = "Selected Project: \(project.name!)"
         }else{
